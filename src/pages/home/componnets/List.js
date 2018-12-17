@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import { ListItem, ListInfo } from '../style';
+import { ListItem, ListInfo, LoadMore } from '../style';
 import { connect } from 'react-redux';
-// import { actionCreators } from '../store';
+import { actionCreators } from '../store';
 // import { Link } from 'react-router-dom';
 
 class List extends PureComponent {
     render() {
-        const { list } = this.props;
+        const { list, getMoreList, page } = this.props;
         return (
             <div>
                 {list.map((item) => {
@@ -21,6 +21,7 @@ class List extends PureComponent {
                     );
                 })
                 }
+                <LoadMore onClick={() => getMoreList(page)}>更多文字</LoadMore>
             </div>
         )
     }
@@ -28,12 +29,13 @@ class List extends PureComponent {
 
 const mapState = (state) => ({
     list: state.getIn(['home', 'articleList']),
+    page: state.getIn(['home', 'articlePage']),
 });
 
-// const mapDispatch = (dispatch) => ({
-//     getMoreList(page) {
-//         dispatch(actionCreators.getMoreList(page))
-//     }
-// })
+const mapDispatch = (dispatch) => ({
+    getMoreList(page) {
+        dispatch(actionCreators.getMoreList(page))
+    }
+})
 
-export default connect(mapState, null)(List);
+export default connect(mapState, mapDispatch)(List);
